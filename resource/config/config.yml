@@ -1,0 +1,16 @@
+name: Hello
+
+logger:
+  level: info
+  file: logs/app.log
+  format: json
+
+databases:
+  mongos:
+    - name: sso-service
+      host: localhost
+      port: 27017
+      user: root
+      password: root
+      database: sso-db
+  
