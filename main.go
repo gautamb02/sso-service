@@ -3,12 +3,16 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/gautamb02/sso-service/confreader"
+	"github.com/gautamb02/sso-service/logger"
+	"github.com/gautamb02/sso-service/server"
 )
 
 var configPath string
+var Log *log.Logger
 
 func init() {
 	flag.StringVar(&configPath, "config", "", "Path to config file")
@@ -25,9 +29,18 @@ func main() {
 
 	configReader := confreader.NewConfigReader(configPath)
 	config, err := configReader.GetConfig()
+	fmt.Printf("Logger : %s\n", config.Logger)
 	if err != nil {
 		fmt.Printf("Error reading config: %v\n", err)
 		os.Exit(1)
 	}
-	fmt.Printf("Config loaded: %+v\n", config)
+	err = logger.InitLogger(config.Logger)
+	if err != nil {
+		fmt.Printf("❌ Failed to initialize logger: %v\n", err)
+		os.Exit(1)
+	}
+
+	server := server.NewServer(config)
+	server.Start()
+
 }

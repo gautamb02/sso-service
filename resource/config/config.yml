@@ -2,7 +2,7 @@ name: Hello
 
 logger:
   level: info
-  file: logs/app.log
+  file: app.log
   format: json
 
 databases:
