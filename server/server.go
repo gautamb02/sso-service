@@ -6,6 +6,7 @@ import (
 	"github.com/gautamb02/sso-service/api/packages/user"
 	"github.com/gautamb02/sso-service/confreader"
 	"github.com/gautamb02/sso-service/db"
+	"github.com/gautamb02/sso-service/logger"
 	"github.com/gautamb02/sso-service/rest"
 	"github.com/gautamb02/sso-service/shared"
 )
@@ -25,20 +26,23 @@ func NewServer(config *confreader.Config) *Server {
 func (s *Server) Start() {
 	router := rest.NewRouter()
 	handlers := []rest.IHTTPHandlerProvider{
-		user.NewUserModule(MongoDBs[shared.SSO_SERVICE].DB),
+		user.NewUserModule(MongoDBs[shared.SsoService].DB),
 	}
 
 	router.SetupRoutes(handlers)
 	// Start the server
-	router.Run()
+	err := router.Run()
+	if err != nil {
+		logger.Warn("Failed to start server: %s", err.Error())
+	}
 }
 
 func (s *Server) Setup() error {
 	var err error
 
-	MongoDBs[shared.SSO_SERVICE], err = db.NewMongoClient(s.config.Databases.Mongos.SSO_Service)
+	MongoDBs[shared.SsoService], err = db.NewMongoClient(s.config.Databases.Mongos.SSO_Service)
 	if err != nil {
-		return fmt.Errorf("error establishing connection with %s: %s", shared.SSO_SERVICE, err.Error())
+		return fmt.Errorf("error establishing connection with %s: %s", shared.SsoService, err.Error())
 	}
 
 	return nil
