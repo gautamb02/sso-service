@@ -1,0 +1,7 @@
+run:
+  skip-dirs:
+    - ^logger$
+
+linters:
+  disable:
+    - depguard

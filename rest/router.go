@@ -9,7 +9,7 @@ import (
 
 type Route interface {
 	SetupRoutes([]IHTTPHandlerProvider)
-	Run()
+	Run() error
 }
 type Router struct {
 	Route
@@ -33,8 +33,8 @@ func (r *Router) SetupRoutes(handlers []IHTTPHandlerProvider) {
 		}
 	}
 }
-func (r *Router) Run() {
-	r.rr.Run("0.0.0.0:1512")
+func (r *Router) Run() error {
+	return r.rr.Run("0.0.0.0:1512")
 }
 
 func APIWrapper(function func(c *SessionContext)) gin.HandlerFunc {
