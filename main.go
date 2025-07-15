@@ -36,11 +36,16 @@ func main() {
 	}
 	err = logger.InitLogger(config.Logger)
 	if err != nil {
-		fmt.Printf("❌ Failed to initialize logger: %v\n", err)
+		fmt.Printf("Failed to initialize logger: %v\n", err)
 		os.Exit(1)
 	}
-
-	server := server.NewServer(config)
-	server.Start()
+	logger.Info("%+v", config)
+	s := server.NewServer(config)
+	err = s.Setup()
+	if err != nil {
+		logger.Warn("%s", fmt.Sprintf("Error: %s", err.Error()))
+		return
+	}
+	s.Start()
 
 }

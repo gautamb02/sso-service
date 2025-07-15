@@ -7,10 +7,11 @@ logger:
 
 databases:
   mongos:
-    - name: sso-service
+    sso_service:
+      name: sso_service
       host: localhost
       port: 27017
-      user: root
-      password: root
-      database: sso-db
+      user: ""
+      password: ""
+      database: "sso_db"
   

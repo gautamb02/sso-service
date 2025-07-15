@@ -20,10 +20,12 @@ type LoggerConfig struct {
 }
 
 type DatabaseSection struct {
-	Mongos []MongoConfig
-	SQLs   []SQLConfig
+	Mongos MongosConfig
 }
 
+type MongosConfig struct {
+	SSO_Service MongoConfig
+}
 type MongoConfig struct {
 	Name     string
 	Host     string
@@ -34,7 +36,6 @@ type MongoConfig struct {
 }
 
 type SQLConfig struct {
-	Name     string
 	Host     string
 	Port     int
 	User     string
