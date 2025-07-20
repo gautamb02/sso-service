@@ -1,9 +1,12 @@
 package user
 
 import (
+	"context"
 	"net/http"
 
+	"github.com/gautamb02/sso-service/logger"
 	"github.com/gautamb02/sso-service/rest"
+	"github.com/gautamb02/sso-service/shared"
 )
 
 type UserHandler struct {
@@ -39,10 +42,23 @@ func (uh *UserHandler) Homeuser(c *rest.SessionContext) {
 
 func (uh *UserHandler) Signup(c *rest.SessionContext) {
 	var req UserDetail
+	req.Verified = false // Default value for Verified field
+	ctx := context.Background()
+	// defer cancel()
 	err := c.BindJSON(&req)
 	if err != nil {
 		c.Respond(http.StatusBadRequest, map[string]string{"error": "error from bad request"})
 		return
 	}
-	c.Respond(http.StatusOK, map[string]string{"hello": "from user package"})
+	_, err = uh.service.RegisterUser(&req, ctx)
+	if err != nil {
+		logger.Error("error while registering user %v", err.Error())
+		if err == shared.ErrEmailAlreadyExists {
+			c.Respond(http.StatusConflict, map[string]string{"error": "email already exists"})
+			return
+		}
+		c.Respond(http.StatusInternalServerError, map[string]string{"error": "internal server error"})
+		return
+	}
+	c.Respond(http.StatusCreated, map[string]string{"account": "created successfully"})
 }

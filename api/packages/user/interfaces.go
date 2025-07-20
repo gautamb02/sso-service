@@ -1,9 +1,12 @@
 package user
 
+import "context"
+
 type UserServiceI interface {
-	RegisterUser()
+	RegisterUser(user *UserDetail, ctx context.Context) (int64, error)
 }
 
 type UserRepositoryI interface {
-	RegisterUser()
+	RegisterUser(user *UserDetail, ctx context.Context) (int64, error)
+	CheckIfEmailExist(email string, ctx context.Context) (int64, error)
 }
