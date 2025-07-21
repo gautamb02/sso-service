@@ -7,6 +7,8 @@ import (
 	"github.com/gautamb02/sso-service/logger"
 	"github.com/gautamb02/sso-service/rest"
 	"github.com/gautamb02/sso-service/shared"
+
+	auth "github.com/gautamb02/sso-service/shared/authorization"
 )
 
 type UserHandler struct {
@@ -41,7 +43,7 @@ func (uh *UserHandler) Homeuser(c *rest.SessionContext) {
 }
 
 func (uh *UserHandler) Signup(c *rest.SessionContext) {
-	var req UserDetail
+	var req auth.UserCreateRequest
 	req.Verified = false // Default value for Verified field
 	ctx := context.Background()
 	// defer cancel()

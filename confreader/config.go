@@ -11,6 +11,7 @@ type Config struct {
 	Name      string
 	Logger    LoggerConfig
 	Databases DatabaseSection
+	SecretKey string
 }
 
 type LoggerConfig struct {
@@ -51,7 +52,9 @@ func NewConfigReader(path string) *ConfigReader {
 	return &ConfigReader{Path: path}
 }
 
-func (c *ConfigReader) GetConfig() (*Config, error) {
+var globalConfig *Config
+
+func (c *ConfigReader) LoadConfig() (*Config, error) {
 	data, err := os.ReadFile(c.Path)
 	if err != nil {
 		return nil, fmt.Errorf("cannot read config file: %w", err)
@@ -61,6 +64,9 @@ func (c *ConfigReader) GetConfig() (*Config, error) {
 	if err := yaml.Unmarshal(data, &cfg); err != nil {
 		return nil, fmt.Errorf("cannot parse config file: %w", err)
 	}
-
-	return &cfg, nil
+	globalConfig = &cfg
+	return globalConfig, nil
+}
+func GetConfig() *Config {
+	return globalConfig
 }

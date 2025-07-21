@@ -28,7 +28,7 @@ func main() {
 	}
 
 	configReader := confreader.NewConfigReader(configPath)
-	config, err := configReader.GetConfig()
+	config, err := configReader.LoadConfig()
 	fmt.Printf("Logger : %s\n", config.Logger)
 	if err != nil {
 		fmt.Printf("Error reading config: %v\n", err)

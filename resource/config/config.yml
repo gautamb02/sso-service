@@ -15,3 +15,4 @@ databases:
       password: ""
       database: "sso_db"
   
+SecretKey: "JWTSECRETKEY"

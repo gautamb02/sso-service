@@ -4,6 +4,8 @@ import (
 	"context"
 
 	"github.com/gautamb02/sso-service/shared"
+
+	auth "github.com/gautamb02/sso-service/shared/authorization"
 )
 
 type UserService struct {
@@ -16,7 +18,7 @@ func NewUserService(repo UserRepositoryI) UserServiceI {
 	}
 
 }
-func (s *UserService) RegisterUser(user *UserDetail, ctx context.Context) (int64, error) {
+func (s *UserService) RegisterUser(user *auth.UserCreateRequest, ctx context.Context) (int64, error) {
 	exist, err := s.userRepo.CheckIfEmailExist(user.Email, ctx)
 	if err != nil {
 		return 0, err
